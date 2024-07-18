@@ -1,4 +1,4 @@
-package vip.dengwj.principles.demo1;
+package vip.dengwj.principles._01kb;
 
 public class Test {
     public static void main(String[] args) {

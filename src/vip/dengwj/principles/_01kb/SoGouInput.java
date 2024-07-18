@@ -1,4 +1,4 @@
-package vip.dengwj.principles.demo1;
+package vip.dengwj.principles._01kb;
 
 public class SoGouInput {
     private AbstractSkin abstractSkin;
