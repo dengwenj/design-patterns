@@ -19,5 +19,9 @@ public class Test {
         Singleton5 instance5 = Singleton5.getInstance();
         Singleton5 instance6 = Singleton5.getInstance();
         System.out.println(instance5 == instance6);
+
+        Singleton6 instance4 = Singleton6.INSTANCE;
+        Singleton6 instance7 = Singleton6.INSTANCE;
+        System.out.println(instance4 == instance7);
     }
 }

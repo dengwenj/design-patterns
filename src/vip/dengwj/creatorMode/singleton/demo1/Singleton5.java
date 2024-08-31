@@ -1,11 +1,13 @@
 package vip.dengwj.creatorMode.singleton.demo1;
 
+import java.io.Serializable;
+
 /**
  * @date 2024/8/31 23:07
  * @author 朴睦
  * @description 懒汉式（静态内部类方式）
  */
-public class Singleton5 {
+public class Singleton5 implements Serializable {
     /**
      * 静态内部类单例模式中实例由内部类创建，由于 JVM 在加载外部类的过程中，是不会加载静态内部类的，只有内部类的属性/方法
      * 被调用时才会被加载，并初始化其静态属性。静态属性由于被 static 修饰，保证只被实例化一次，并且严格保证实例化顺序
