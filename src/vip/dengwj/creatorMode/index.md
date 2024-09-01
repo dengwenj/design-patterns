@@ -21,4 +21,56 @@
 * 2、懒汉式：类加载不会导致该单例对象被创建，而是首次使用该对象时才会创建
 
 ## 存在的问题
-* 破坏单例模式：创建对个对象，分别是系列化和反射
+* 破坏单例模式：创建对个对象，分别是序列化和反射
+
+## 问题的解决
+* 序列化、反序列化破坏单例模式的解决方法
+* 在 Singleton 类中添加 readResolve() 方法，在反序列化时被反射调用，如果定义了这个方法，就返回这个方法的值，如果没有定义，则返回新 new 出来的对象
+```java
+package vip.dengwj.creatorMode.singleton.demo1;
+
+import java.io.Serial;
+import java.io.Serializable;
+
+/**
+ * @date 2024/8/31 23:07
+ * @author 朴睦
+ * @description 懒汉式（静态内部类方式）
+ */
+public class Singleton5 implements Serializable {
+    private static boolean flag = false;
+
+    /**
+     * 静态内部类单例模式中实例由内部类创建，由于 JVM 在加载外部类的过程中，是不会加载静态内部类的，只有内部类的属性/方法
+     * 被调用时才会被加载，并初始化其静态属性。静态属性由于被 static 修饰，保证只被实例化一次，并且严格保证实例化顺序
+     *
+     * 第一次加载 {@link Singleton5} 类时不会去初始化 INSTANCE，只有第一次调用 getInstance，虚拟机加载 {@link Singleton5Holder}
+     * 并初始化 INSTANCE，这样不仅能确保线程安全，也能保证 Singleton 类的唯一性
+     */
+    private Singleton5() {
+        // 反射破解单例模式需要添加的代码
+        synchronized (Singleton5.class) {
+            if (flag) {
+                throw new RuntimeException("不能创建多个对象");
+            }
+            flag = true;
+        }
+    }
+
+    // 静态内部类单例模式是一种优秀的单例模式，在没有加任何锁的情况下，保证了多线程下的安全，并且没有任何性能影响和空间浪费
+    private static class Singleton5Holder {
+        private static final Singleton5 INSTANCE = new Singleton5();
+    }
+
+    // 对外提供静态方法获取该对象
+    public static Singleton5 getInstance() {
+        return Singleton5Holder.INSTANCE;
+    }
+
+    // 当进行反序列化时，会自动调用该方法，将该方法的返回值直接返回
+    @Serial
+    public Object readResolve() {
+        return Singleton5Holder.INSTANCE;
+    }
+}
+```
