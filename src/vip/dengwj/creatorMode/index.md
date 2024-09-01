@@ -74,3 +74,5 @@ public class Singleton5 implements Serializable {
     }
 }
 ```
+
+### 工厂模式
