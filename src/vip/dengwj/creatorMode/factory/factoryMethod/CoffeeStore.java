@@ -8,6 +8,9 @@ public class CoffeeStore {
     }
 
     public Coffee orderCoffee() {
+        if (coffeeFactory == null) {
+            throw new NullPointerException("请先创建具体工厂");
+        }
         Coffee coffee = coffeeFactory.createCoffee();
         coffee.addMilk();
         coffee.addSugar();
