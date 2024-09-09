@@ -129,3 +129,45 @@ public class Singleton5 implements Serializable {
 * 系统中有多个产品族，但每次只使用其中的某一族产品。如有人只喜欢穿某一个品牌的衣服和鞋
 * 系统中提供了产品的类库，且所有产品的接口相同，客户端不依赖产品实例的创建细节和内部结构
 * 如：输入法换皮肤，一整套一起换
+
+### 模式扩展
+* 简单工厂 + 配置文件解除耦合
+* 可以通过工厂模式 + 配置文件的方式解除工厂对象和产品对象的耦合。在工厂类中加载配置文件中的全类名，并创建对象进行存储，客户端如果需要对象，直接进行获取即可
+```java
+public class CoffeeFactory {
+    //静态成员变量用来存储创建的对象
+    private static final Map<String, Coffee> coffeeMap = new HashMap<>();
+
+    // 只执行一次，读取配置文件，通过反射的方式创建对象
+    static {
+        Properties prop = new Properties();
+        // 输入流
+        //InputStream resourceAsStream = CoffeeFactory.class.getClassLoader().getResourceAsStream("bean.properties");
+        InputStream is;
+        try {
+            is = new FileInputStream("src/resources/bean.properties");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            prop.load(is);
+            Set<Object> keys = prop.keySet();
+            for (Object key : keys) {
+                // 获取 Coffee 的字节码对象
+                Class<?> clazz = Class.forName(prop.getProperty((String) key));
+                Constructor<?> declaredConstructor = clazz.getDeclaredConstructor();
+                Coffee coffee = (Coffee) declaredConstructor.newInstance();
+                coffeeMap.put((String) key, coffee);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Coffee createCoffee(String name) {
+        return coffeeMap.get(name);
+    }
+}
+```
