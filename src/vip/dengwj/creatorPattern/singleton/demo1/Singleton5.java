@@ -1,6 +1,5 @@
 package vip.dengwj.creatorPattern.singleton.demo1;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -39,7 +38,6 @@ public class Singleton5 implements Serializable {
     }
 
     // 当进行反序列化时，会自动调用该方法，将该方法的返回值直接返回
-    @Serial
     public Object readResolve() {
         return Singleton5Holder.INSTANCE;
     }

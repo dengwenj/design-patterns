@@ -5,5 +5,6 @@ public class Test {
         ProxyFactory factory = new ProxyFactory();
         SellTickets proxyObject = factory.getProxyObject();
         proxyObject.sell();
+        System.out.println(proxyObject.getClass().getName());
     }
 }

@@ -55,3 +55,39 @@ public class ProxyFactory {
     }
 }
 ```
+执行流程：
+* 1、在测试类中通过代理对象调用 sell() 方法
+* 2、根据多态的特性，执行的是代理类（$Proxy0）中的 sell() 方法
+* 3、代理类（$Proxy0）中的 sell() 方法中又调用了 InvocationHandler 接口的子实现类对象的 invoke 方法
+* 4、invoke 方法里通过 method 反射方式执行了真实对象所属类（TrainStation）中的 sell() 方法
+
+### CGLIB 动态代理
+* 如果没有定义 SellTickets 接口，只定义了 TrainStation。很显然 JDK 代理是无法使用了，因为 JDK 动态代理要求必须定义接口，对接口进行代理
+* CGLib 是一个功能强大，高性能的代码生成包。它为没有实现接口的类通过代理，为 JDK 的动态代理提供了很好的补充
+* CGLib 是第三方提供的包，需要引入
+```java
+public class ProxyFactory implements MethodInterceptor {
+    private final TrainStation trainStation = new TrainStation();
+
+    // 获取代理对象，cglib 实现的方式是 继承
+    public TrainStation getProxyObject() {
+        // 创建 Enhancer 对象，类似与 JDK 代理中订单 Proxy 类
+        Enhancer enhancer = new Enhancer();
+        // 设置父类的字节码对象，指定父类
+        enhancer.setSuperclass(TrainStation.class);
+        // 设置回调函数
+        enhancer.setCallback(this);
+        // 创建代理对象（TrainStation 的 子类）
+        // CGLib是针对类实现代理，对指定的类生成一个子类，并覆盖其中的方法，这种通过继承类的实现方式，不能代理final修饰的类。
+        TrainStation proxyObject = (TrainStation) enhancer.create();
+        return proxyObject;
+    }
+
+    @Override
+    public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
+        System.out.println("cglib 代理对象执行的放大");
+        Object obj = method.invoke(trainStation, objects);
+        return obj;
+    }
+}
+```
