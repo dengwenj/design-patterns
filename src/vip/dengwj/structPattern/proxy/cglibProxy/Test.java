@@ -6,5 +6,6 @@ public class Test {
         // 获取代理对象
         TrainStation proxyObject = factory.getProxyObject();
         proxyObject.sell();
+        System.out.println(proxyObject.getClass().getName());
     }
 }
