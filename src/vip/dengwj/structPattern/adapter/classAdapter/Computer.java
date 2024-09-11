@@ -1,4 +1,4 @@
-package vip.dengwj.structPattern.adapter;
+package vip.dengwj.structPattern.adapter.classAdapter;
 
 public class Computer {
     public String readCard(SDCard card) {

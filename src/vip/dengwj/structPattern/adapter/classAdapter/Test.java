@@ -1,4 +1,4 @@
-package vip.dengwj.structPattern.adapter;
+package vip.dengwj.structPattern.adapter.classAdapter;
 
 public class Test {
     public static void main(String[] args) {

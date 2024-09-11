@@ -1,4 +1,4 @@
-package vip.dengwj.structPattern.adapter;
+package vip.dengwj.structPattern.adapter.classAdapter;
 
 /**
  * @date 2024/9/11 15:03
