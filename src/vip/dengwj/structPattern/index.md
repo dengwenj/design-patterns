@@ -130,4 +130,55 @@ public class ProxyFactory implements MethodInterceptor {
 
 ### 对象适配器模式
 * 实现方式：对象适配器模式可采用将现有组件库中已经实现的组件引入适配器类中（就是可以传递不同的，如果是继承的话就写死了），该类同时实现当前系统的业务接口
-* 
+```java
+// 目标接口（客户期望的接口）
+interface Target {
+    void request();
+}
+ 
+// 需要适配的类（已存在的类，但接口不符合）
+class Adaptee {
+    public void specificRequest() {
+        System.out.println("适配器类特定的请求方法");
+    }
+}
+ 
+// 适配器类，将Adaptee的接口转换成Target的接口
+class Adapter implements Target {
+    private Adaptee adaptee;
+    
+    public Adapter(Adaptee adaptee) {
+        this.adaptee = adaptee;
+    }
+    
+    @Override
+    public void request() {
+        // 这里可以添加一些处理逻辑，将Adaptee的特定请求转换为符合Target接口的请求
+        adaptee.specificRequest();
+    }
+}
+ 
+// 测试适配器模式
+public class Main {
+    public static void main(String[] args) {
+        // 创建一个Adaptee对象
+        Adaptee adaptee = new Adaptee();
+        
+        // 创建一个适配器对象，将adaptee的特定请求适配为Target接口的请求
+        Target target = new Adapter(adaptee);
+        
+        // 客户端通过Target接口调用request方法
+        target.request();
+    }
+}
+```
+### 应用场景
+* 以前开发的系统存在满足新系统功能需求的类，但其接口同新系统的接口不一致
+* 使用第三方提供的组件，但组件接口定义和自己要求的接口定义不同
+
+### 在Java中，适配器模式有一些常见的用途，包括：
+* 将不兼容的接口转换为兼容的接口：适配器模式可以用来将不兼容的接口转换为兼容的接口，使得不同类之间可以更容易地相互通信和协作。
+* 实现接口的部分方法：适配器模式可以用来实现接口的部分方法，即只需要实现接口中需要的方法，而不需要实现所有方法。
+* 统一接口：适配器模式可以用来统一一组不同类的接口，使它们具有相同的接口，从而可以像处理同一种类一样处理它们。
+* 实现回调机制：适配器模式可以用来实现回调机制，即当某个事件发生时，适配器会调用指定的方法，从而实现事件通知和处理。
+* 装饰器模式：适配器模式也可以与装饰器模式结合使用，从而可以对已有的对象进行功能增强，而不需要修改其原有的代码。
