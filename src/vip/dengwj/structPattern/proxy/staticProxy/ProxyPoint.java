@@ -6,7 +6,7 @@ package vip.dengwj.structPattern.proxy.staticProxy;
  * @description 代理类
  */
 public class ProxyPoint implements SellTickets {
-    private final TrainStation trainStation = new TrainStation();
+    private final SellTickets trainStation = new TrainStation();
 
     @Override
     public void sell() {
