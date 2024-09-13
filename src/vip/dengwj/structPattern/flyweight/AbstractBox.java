@@ -8,6 +8,7 @@ package vip.dengwj.structPattern.flyweight;
 public abstract class AbstractBox {
     public abstract String getShape();
 
+    // color 是外部状态，通过传递的方式
     public void display(String color) {
         System.out.println(getShape() + " -> " + color);
     }

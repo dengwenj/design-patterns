@@ -9,11 +9,13 @@ import java.util.Map;
  * @description 共享工厂
  */
 public class BoxFactory {
+    // 享元池，用来存储缓存具体享元
     private Map<String, AbstractBox> map;
 
     private BoxFactory() {
         map = new HashMap<>();
-        map.put("I", new IBox());
+        // 创建对象时内部状态，可以共享
+        map.put("I", new IBox()); // 享元对象
         map.put("O", new OBox());
         map.put("L", new LBox());
     }
