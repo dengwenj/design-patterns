@@ -13,6 +13,15 @@ public class Test {
         context.setStrategy(new StrategyC());
         context.go();
 
+        context.setStrategy(new Strategy() {
+            // 具体的策略
+            @Override
+            public void show() {
+                System.out.println("具体策略D");
+            }
+        });
+        context.go();
+
         System.out.println("-------------------");
 
         Random random = new Random();

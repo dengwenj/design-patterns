@@ -17,11 +17,13 @@ public class Context {
         return strategy;
     }
 
+    // 传递具体策略对象
     public void setStrategy(Strategy strategy) {
         this.strategy = strategy;
     }
 
     public void go() {
+        //调用具体策略模式的方法
         strategy.show();
     }
 

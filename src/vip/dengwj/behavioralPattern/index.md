@@ -76,6 +76,7 @@ public abstract class StirFry {
 * 需要通过子类来决定父类算法中某个步骤是否执行，实现子类对父类的反向控制
 
 ### 策略模式（多选一的切换）
+* 对策略的理解：制定某种方案
 * 定义：该模式定义了一系列算法，并将每个算法封装起来，使它们可以相互替换，且算法的变化不会影响使用算法的客户。
 * 策略模式属于对象行为模式，它通过对算法进行封装，把使用算法的责任和算法的实现分割开来，并委派给不同的对象对这些算法进行管理（环境类）
 
@@ -98,3 +99,32 @@ public abstract class StirFry {
 * 一个类定义了多种行为，并且这些行为在这个类的操作中以多个条件语句的形式出现，可将每个条件分支移入它们各自的策略类中以代替这些条件语句
 * 系统中各算法彼此完全独立，且要求对客户隐藏具体算法的实现细节时
 * 多个类只区别在表现行为不同，可以使用策略模式，在运行时动态选择具体要执行的行为
+```java
+public class Context {
+    // 聚合具体策略类
+    private Strategy strategy;
+
+    public Context(Strategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public Strategy getStrategy() {
+        return strategy;
+    }
+
+    // 传递具体策略对象
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void go() {
+        // 调用具体策略对象的方法
+        strategy.show();
+    }
+
+    public void ifElse(S s) {
+        Strategy strategy1 = StrategyFactory.getInstance().getStrategy(s);
+        strategy1.show();
+    }
+}
+```
