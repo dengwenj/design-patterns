@@ -34,12 +34,12 @@ public abstract class StirFry {
     public final void cookProcess() {
         oilDown();
         oilHot();
-        pourVegetables();
+        pourVegetables(); // 反向控制（由子类去实现，父类调用），反向控制就是模板方法模式的思想
         condiments();
         fry();
     }
 
-    // 下油,流程是固定的
+    // 下油,流程是固定的，具体方法
     public void oilDown() {
         System.out.println("第一步下油");
     }
@@ -49,7 +49,7 @@ public abstract class StirFry {
         System.out.println("第二步热油");
     }
 
-    // 倒蔬菜，具体的东西不知道，抽象方法
+    // 倒蔬菜，具体的东西不知道，抽象方法，子类实现
     public abstract void pourVegetables();
 
     // 倒调料品，具体的东西不知道，抽象方法
@@ -66,6 +66,7 @@ public abstract class StirFry {
 * 优点：
 * 提高代码复用性，将相同部分的代码放在抽象的父类中，而将不同的代码放入不同的子类中
 * 实现了反向控制，通过一个父类调用其子类的操作，通过对子类的具体实现扩展不同的行为，实现了反向控制，并符合“开闭原则”
+* 反向控制（由子类去实现，父类调用），反向控制就是模板方法模式的思想 
 * 缺点：
 * 对每个不同的实现都需要定义一个子类，这会导致类的个数增加，系统更加庞大，设计也更加抽象
 * 父类中的抽象方法由子类实现，子类执行的结果会影响父类的结果，这导致一种反向的控制结构，它提高了代码阅读的难度
