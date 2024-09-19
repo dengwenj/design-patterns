@@ -193,3 +193,58 @@ public class OrderCommand implements Command {
 * 抽象处理者（Handler）：定义一个处理请求的接口，包含抽象处理方法和一个后继连接
 * 具体处理者（Concrete Handler）：实现抽象处理者的处理方法，判断能否处理本次请求，如果可以处理请求则处理，否则将该请求转给它的后继者
 * 客户类：创建处理链，并向链头的具体处理者对象提交请求，它不关心处理的细节和请求的传递过程
+```java
+public abstract class Handler {
+    public static final int NUM_ONE = 1;
+    public static final int NUM_THREE = 3;
+    public static final int NUM_SEVEN = 7;
+
+    // 领导审核天数的区间
+    private int numStart;
+
+    private int numEnd;
+
+    // 上级领导（下一个链）
+    private Handler nextHandler;
+
+    public Handler(int numStart, int numEnd) {
+        this.numStart = numStart;
+        this.numEnd = numEnd;
+    }
+
+    public void setNextHandler(Handler nextHandler) {
+        this.nextHandler = nextHandler;
+    }
+
+    // 各领导审核
+    protected abstract void leave(LeaveRequest leaveRequest);
+
+    // 提交请假条
+    public void submit(LeaveRequest leaveRequest) {
+        leave(leaveRequest);
+
+        int day = leaveRequest.getDay();
+        // 上一级领导审批
+        if (day > numEnd && nextHandler != null) {
+            nextHandler.submit(leaveRequest);
+        } else {
+            // 最后一次会走到这里来
+            System.out.println("审批完成 " + leaveRequest.getName() + " 通过！");
+        }
+    }
+}
+```
+
+### 优点
+* 降低了对象之间的耦合度，该模式降低了请求发送者和接收者的耦合度
+* 增强了系统的可扩展性，可以根据需要增加新的请求处理类，满足开闭原则
+* 增强了给对象指派职责的灵活性，当工作流程发生变化，可以动态的改变链内的成员或者修改它们的次序，也可动态的新增或者删除责任
+* 责任链简化了对象之间的连接，一个对象只需要保持一个指向其后继者的引用，不需保持其他所有处理者的引用
+* 责任分担，没个类只需要处理自己改处理的工作，不能处理的传递给下一个对象完成，明确各类的责任范围，符合类的单一职责原则
+
+### 缺点
+* 不能保证每个请求一定被处理，由于一个请求没有明确的接收者，所以不能保证它一定会被处理，该请求可能一直传递到链的末端都得不到处理
+* 对于比较长的职责链，请求的处理可能涉及多个处理对象，系统性能受到一定影响
+* 职责链建立的合理性要靠客户端来保证，增加了客户端的复杂性，可能会由于职责链的错误设置而导致系统出错
+
+### javaweb 过滤器责任链（递归的方式）

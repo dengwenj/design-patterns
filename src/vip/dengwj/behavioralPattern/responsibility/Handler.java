@@ -34,12 +34,13 @@ public abstract class Handler {
     public void submit(LeaveRequest leaveRequest) {
         leave(leaveRequest);
 
+        int day = leaveRequest.getDay();
         // 上一级领导审批
-        if (leaveRequest.getDay() > numEnd && nextHandler != null) {
-            nextHandler.leave(leaveRequest);
+        if (day > numEnd && nextHandler != null) {
+            nextHandler.submit(leaveRequest);
         } else {
-            // 当前领导有能力审批
+            // 最后一次会走到这里来
+            System.out.println("审批完成 " + leaveRequest.getName() + " 通过！");
         }
-        System.out.println("审批完成 " + leaveRequest.getName() + " 通过！");
     }
 }
