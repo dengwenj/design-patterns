@@ -279,3 +279,40 @@ public abstract class Handler {
 * ConcreteSubject：具体主题（具体被观察者），该角色将有关状态存入具体观察者对象，在具体主题的内部状态发生改变时，给所有注册过的观察者发送通知
 * Observer：抽闲观察者，是观察者的抽象类，它定义了一个更新接口，使得在得到主题更改通知时更新自己
 * ConcreteObserver：具体观察者，实现抽象观察者定义的更新接口，以便在得到主题更改通知时更新自身的状态
+```java
+/**
+ * @date 2024/9/21 15:58
+ * @author 朴睦
+ * @description 具体主题者
+ */
+public class ConcreteSubject implements Subject {
+    private final List<Observer> observers = new ArrayList<>();
+
+    @Override
+    public void registerObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(String message) {
+        observers.forEach(observer -> observer.update(message));
+    }
+}
+```
+
+### 优缺点
+* 优点：
+* 1、降低了目标与观察者之间的耦合关系，两者之间是抽象耦合关系
+* 2、被观察者发送通知，所有注册的观察者都会收到信息（可以实现广播机制）
+* 缺点：
+* 1、如果观察者非常多的话，那么所有的观察者收到被观察者发送的通知会耗时
+* 2、如果被观察者有循环依赖的话，那么被观察者发送通知会使观察者循环调用，会导致系统崩溃
+
+### 使用场景
+* 对象间存在一对多关系，一个对象的状态发生改变会影响其他对象
+* 当一个抽象模型有两个方面，其中一个方面依赖于另一个方面时

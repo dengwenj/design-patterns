@@ -14,6 +14,7 @@ public class ConcreteObserver implements Observer {
 
     @Override
     public void update(String message) {
+        // 做具体的事情
         System.out.println(name + " -> " + message);
     }
 }
