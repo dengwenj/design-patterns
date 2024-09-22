@@ -355,3 +355,126 @@ public class ConcreteSubject implements Subject {
 * 当需要为聚合对象提供多种遍历方式时
 * 当需要为遍历不同的聚合结构提供一个统一的接口时
 * 当访问一个聚合对象的内容而无需暴露其内部细节的表示时
+```java
+public class IteratorImpl implements Iterator<Student> {
+
+    private final List<Student> studentList;
+
+    private int position = 0;
+
+    public IteratorImpl(List<Student> studentList) {
+        this.studentList = studentList;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return position < studentList.size();
+    }
+
+    @Override
+    public Student next() {
+        Student student = studentList.get(position);
+        position++;
+        return student;
+    }
+}
+```
+
+### 访问者模式
+* 封装一些作用于某种数据结构中的各元素的操作（数据结构和各元素操作 进行分离），它可以在不改变这个数据结构的前提下定义作用于这些元素的新的操作
+
+### 结构
+* 抽象访问者角色：定义了对每一个元素访问的行为，它的参数就是可以访问的元素，它的方法个数理论上来讲和元素类个数是一样的，访问者模式要求元素类的个数不能改变
+* 具体访问者：给出对每一个元素类访问时所产生的具体行为
+* 抽象元素：定义了一个接受访问者的方法（accept），其意义是指，每一个元素都要可以被访问者访问
+* 具体元素：提供接受访问方法的具体实现，而这个具体实现，通常情况下是使用访问者提供的访问该元素类的方法
+* 对象结构：定义当中所提到的对象结构，对象结构是一个抽象表述，具体点可以理解为一个具有容器性质或者复合对象特性的类，它会含有一组元素，并且可以迭代这些元素，供访问者访问
+
+### 优缺点
+* 优点：
+* 扩展性好，在不修改对象结构中的元素的情况下，为对象结构中的元素添加新的功能
+* 复用性好，通过访问者来定义整个对象结构通用的功能，从而提高复用程度
+* 分离无关行为，通过访问者来分离无关的行为，把相关的行为封装在一起，构成一个访问者，这样每一个访问者的功能都比较单一
+* 缺点：
+* 对象结构变化很困难，在访问者模式中，每增加一个新的元素类，都要在每一个具体访问者类中增加相应的具体操作，这违背了”开闭原则“
+* 违反了依赖倒置原则，访问者模式依赖了具体类，而没有依赖抽象类（面向接口编程，而不是面向实现编程）
+
+### 使用场景
+* 对象结构相对稳定，但其操作算法经常变化的程序
+* 对象结构中的对象需要提供多种不同且不相关的操作，而且要避免让这些操作的变化影响对象的结构
+
+### 分派（就是根据类型选择方法）
+* 变量被声明时的类型叫做变量的静态类型，又把静态类型叫做明显类型，而变量所引用的对象的真实类型又叫做变量的实际类型。比如 Map map = new HashMap()
+* map 变量的静态类型是 Map，实际类型是 HashMap。根据对象的类型而对方法进行的选择就是分派（dispatch），分派又分为，静态分派和动态分派
+* 静态分派：发生在编译时期，分派根据静态类型信息发生。比如方法重载就是静态分派
+* 动态分派：发生在运行时期，动态分派动态的置换掉某个方法。java 通过方法的重写支持动态分派
+
+### 动态分派（通过方法的重写支持动态分派）
+* java 编译器在编译时期并不总是知道哪些代码会被执行，因为编译器仅仅知道对象的静态类型，而不知道对象的真实类型，而方法的调用则是根据对象的真实类型，而不是静态类型
+
+### 静态分派（通过方法重载支持静态分派）
+* 重载方法的分派是静态类型进行的，这个分派过程在编译时期就完成了
+
+### 双分派
+```java
+/**
+ * @date 2024/9/22 17:28
+ * @author 朴睦
+ * @description 双分派
+ * 双分派实现动态绑定的本质，就是在重载方法委派的前面加上了继承体系中覆盖的环节，由于覆盖是动态的，所以后面重载就是拿到动态时的类型
+ */
+public class Test {
+    public static void main(String[] args) {
+        Animal animal = new Animal();
+        Animal dog = new Dog();
+        Animal cat = new Cat();
+
+        Visitor visitor = new Visitor();
+        animal.accept(visitor);
+        dog.accept(visitor);
+        cat.accept(visitor);
+    }
+}
+
+// 方法重载 是静态分派（编译时确定，看左边）
+// 方法重写 是动态分派（运行时确定，看右边）
+
+class Visitor {
+    // 方法重载
+    public void execute(Animal animal) {
+        System.out.println("animal");
+    }
+
+    // 方法重载
+    public void execute(Dog dog) {
+        System.out.println("dog");
+    }
+
+    // 方法重载
+    public void execute(Cat cat) {
+        System.out.println("cat");
+    }
+}
+
+class Animal {
+    public void accept(Visitor visitor) {
+        visitor.execute(this);
+    }
+}
+
+// 方法重写
+class Dog extends Animal {
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.execute(this);
+    }
+}
+
+// 方法重写
+class Cat extends Dog {
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.execute(this);
+    }
+}
+```
