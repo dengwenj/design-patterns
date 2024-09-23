@@ -478,3 +478,100 @@ class Cat extends Dog {
     }
 }
 ```
+
+### 备忘录模式
+* 又叫快照模式，在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，以便以后需要时能将该对象恢复到原先保存的状态
+
+### 结构
+* 发起人角色：记录当前时刻的内部状态信息，提供创建备忘录和恢复备忘录数据的功能，实现其他业务功能，它可以访问备忘录里的所有信息
+* 备忘录角色：负责存储发起人的内部状态，在需要的时候提供这些内部状态给发起人
+* 管理者角色：对备忘录进行管理，提供保存与获取备忘录的功能，但其不能对备忘录的内容进行访问和修改
+* 备忘录有两个等效的接口：
+* 窄接口：管理者对象（和其他发起人对象之外的任何对象）看到的是备忘录的窄接口，这个窄接口只允许它把备忘录对象传给其他对象
+* 宽接口：与管理者看到的窄接口相反，发起人对象可以看到一个宽接口，这个宽接口允许它读取所有的数据，以便根据这些数据恢复这个发起人对象的内部状态
+* 可以用栈的形式存储备忘录（后进先出）
+
+### "白箱"备忘录模式
+* 备忘录角色对任何对象都提供一个接口，即宽接口，备忘录角色的内部所存储的状态就对所有对象公开
+```java
+// 发起人角色里，RoleStateMemento 是备忘录角色类 
+public RoleStateMemento saveState() {
+    return new RoleStateMemento();
+}
+```
+
+### “黑箱”备忘录模式
+* 备忘录角色对发起人对象提供一个宽接口，而为其他对象提供一个窄接口，在 java 语言中，实现双重接口的办法就是将备忘录类设计成发起人类的成员内部类
+```java
+public class Test {
+    public static void main(String[] args) {
+        GameRole gameRole = new GameRole();
+        // 初始化状态
+        gameRole.initState();
+        gameRole.stateDisplay();
+
+        RoleStateCaretaker roleStateCaretaker = new RoleStateCaretaker();
+        // 保存状态
+        Memento memento = gameRole.saveState();
+        roleStateCaretaker.setMemento(memento);
+
+        // 消耗
+        gameRole.useUp();
+        gameRole.stateDisplay();
+
+        // 恢复状态
+        Memento memento1 = roleStateCaretaker.getMemento();
+        gameRole.recoverState(memento1);
+        gameRole.stateDisplay();
+    }
+}
+
+public class GameRole {
+    private int vit;
+
+    // 初始化状态
+    public void initState() {
+        this.vit = 100;
+    }
+
+    // 消耗
+    public void useUp() {
+        this.vit = 0;
+    }
+
+    // 保存角色状态功能
+    public Memento saveState() {
+        return new RoleState(vit);
+    }
+
+    // 恢复角色状态
+    public void recoverState(Memento memento) {
+        // 编译看左边，运行看右边
+        RoleState roleState = (RoleState) memento;
+        // 将备忘录对象中存储的状态赋值给当前对象的成员
+        this.vit = roleState.getVit();
+    }
+
+    // 展示状态
+    public void stateDisplay() {
+        System.out.println(this.vit);
+    }
+
+    // 外部访问不了
+    private static class RoleState implements Memento {
+        private int vit;
+
+        public RoleState(int vit) {
+            this.vit = vit;
+        }
+
+        public int getVit() {
+            return vit;
+        }
+
+        public void setVit(int vit) {
+            this.vit = vit;
+        }
+    }
+}
+```
