@@ -56,7 +56,7 @@
 <!--bean 标签还有很多属性 scope、init-method、destroy-method 等，这些属性由 BeanDefinition 实现类来实现-->
 ```
 
-### BeanDefinitionReader 解析
+### BeanDefinitionReader 接口解析
 * Bean 的解析过程非常复杂，功能被分得很细，因为这里需要被扩展的地方很多，必须保证足够的灵活性，以应对可能的变化，Bean 的解析主要就是对 spring 配置文件的解析。
 * 这个解析过程主要通过 BeanDefinitionReader。
 * BeanDefinitionReader 用来解析 bean 定义，并封装成 BeanDefinition 对象
@@ -73,7 +73,7 @@ public interface BeanDefinitionReader {
 }
 ```
 
-### BeanDefinitionRegistry 解析
+### BeanDefinitionRegistry 接口解析
 * BeanDefinitionReader 用来解析 bean 定义，并封装成 BeanDefinition 对象，而我们定义的配置文件中定义了很多 bean 标签，所以就有一个问题，解析的 BeanDefinition 对象存储到哪儿？
 * 存储到 BeanDefinition 的注册中心，而该注册中心顶层接口就是 BeanDefinitionRegistry
 
@@ -104,3 +104,7 @@ public interface BeanDefinitionRegistry extends AliasRegistry {
 // 用 map 注册 bean 的
 private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
 ```
+
+### 创建容器
+* ClasspathXmlApplicationContext 对 Bean 配置资源的载入是从 refresh() 方法开始的。refresh() 方法时一个模版方法，规定了 ioc 容器的启动流程，有些逻辑交给其子类实现。它对 Bean 配置资源进行载入。
+* ClasspathXmlApplicationContext 通过调用其父类 AbstractApplicationContext 的 refresh() 方法启动整个 ioc 容器对 bean 定义的载入过程
