@@ -27,3 +27,24 @@
 * 为什么 bean 如此重要？
 * 1、spring 将 bean 对象交由一个叫 IOC 容器进行管理
 * 2、bean 对象之间的依赖关系在配置文件中体现，并有 spring 完成
+* IOC 容器是什么？就是来管理 bean 对象的
+* bean 对象是什么？就是我们通过 classpath 或 注解的方式告诉 spring，让 spring 来帮我们创建对象，创建的这个对象就是 bean 对象
+
+### BeanFactory 接口解析
+* spring 中 bean 的创建是典型的工厂模式（简单工厂 + 配置文件的方式），这一系列的 bean 工厂，即 ioc 容器，为开发者管理对象之间的依赖关系提供了很多便利和基础服务，
+* 在 spring 中有许多 ioc 容器(就是 BeanFactory)的实现供用户选择。其中 BeanFactory 作为最顶层的一个接口，定义了 ioc 容器的基本功能规范，BeanFactory 有三个重要
+* 的子接口：ListableBeanFactory、HierarchicalBeanFactory 和 AutowireCapableBeanFactory。它们最终的默认实现类是 DefaultListableBeanFactory，它实现了所有的接口
+
+### 为什么要定义这么多层次的接口？
+* 每个接口都有它的使用场景，主要是为了区分在 spring 内部操作过程中对象的传递和转化，对对象的数据访问所做的限制
+* ListableBeanFactory 接口表示这些 Bean 可列表化
+* HierarchicalBeanFactory 表示这些 Bean 是有继承关系的，也就是每个 Bean 可能有父 Bean
+* AutowireCapableBeanFactory 接口定义 Bean 的自动装配规则
+* 这三个接口共同定义了 Bean 的集合、Bean 之间的关系及 Bean 行为。最基本的 IOC 容器接口是 BeanFactory
+* 在 BeanFactory 里只对 IOC 容器的基本行为做了定义，根本不关心你的 Bean 是如何定义及怎样加载的
+* BeanFactory 有一个很重要的子接口，就是 ApplicationContext 接口，该接口主要来规范容器中的 bean 对象是非延时加载，即在创建容器对象的时候就对对象 bean 进行初始化，并存储到一个容器中
+
+### 具体 IOC 容器实现
+* ClasspathXmlApplicationContext：根据类路径加载 xml 配置文件，并创建 IOC 容器对象
+* FileSystemXmlApplicationContext：根据系统路径加载 xml 配置文件，并创建 IOC 容器对象
+* AnnotationConfigApplicationContext：加载注解类配置，并创建 IOC 容器
