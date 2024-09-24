@@ -48,3 +48,59 @@
 * ClasspathXmlApplicationContext：根据类路径加载 xml 配置文件，并创建 IOC 容器对象
 * FileSystemXmlApplicationContext：根据系统路径加载 xml 配置文件，并创建 IOC 容器对象
 * AnnotationConfigApplicationContext：加载注解类配置，并创建 IOC 容器
+
+### BeanDefinition 接口解析
+* spring ioc 容器管理我们定义的各种 bean 对象及其相互的关系，而 bean 对象在 spring 实现中是以 BeanDefinition 来描述的
+```xml
+<bean id="userDao" class="vip.dengwj2.services.impl.UserServiceImpl" />
+<!--bean 标签还有很多属性 scope、init-method、destroy-method 等，这些属性由 BeanDefinition 实现类来实现-->
+```
+
+### BeanDefinitionReader 解析
+* Bean 的解析过程非常复杂，功能被分得很细，因为这里需要被扩展的地方很多，必须保证足够的灵活性，以应对可能的变化，Bean 的解析主要就是对 spring 配置文件的解析。
+* 这个解析过程主要通过 BeanDefinitionReader。
+* BeanDefinitionReader 用来解析 bean 定义，并封装成 BeanDefinition 对象
+
+```java
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+
+public interface BeanDefinitionReader {
+    // 获取 BeanDefinitionRegistry 注册器对象
+    BeanDefinitionRegistry getRegistry();
+    
+    // loadBeanDefinitions 都是加载 bean 定义，从指定的资源中
+    int loadBeanDefinitions(参数);
+}
+```
+
+### BeanDefinitionRegistry 解析
+* BeanDefinitionReader 用来解析 bean 定义，并封装成 BeanDefinition 对象，而我们定义的配置文件中定义了很多 bean 标签，所以就有一个问题，解析的 BeanDefinition 对象存储到哪儿？
+* 存储到 BeanDefinition 的注册中心，而该注册中心顶层接口就是 BeanDefinitionRegistry
+
+```java
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.core.AliasRegistry;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+public interface BeanDefinitionRegistry extends AliasRegistry {
+    // 往注册表中注册 bean
+    void registerBeanDefinition(String beanName, BeanDefinition beanDefinition);
+
+    // 往注册表中删除指定名称的 bean
+    void removeBeanDefinition(String beanName);
+
+    // 获取注册表中指定名称的 bean
+    BeanDefinition getBeanDefinition(String beanName);
+
+    // 判断注册表中是否已经注册了指定名称的 bean
+    boolean containsBeanDefinition(String beanName);
+
+    // 获取注册表中所有的 bean 的名称
+    String[] getBeanDefinitionNames();
+}
+
+// 用 map 注册 bean 的
+private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
+```
