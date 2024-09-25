@@ -113,3 +113,14 @@ private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHash
 * PropertyValue 类：用于封装 bean 的属性，配置文件就是封装 bean 标签的子标签 property 标签数据
 * MutablePropertyValues 类：一个 bean 标签可以有多个 property 子标签，所以再定义一个类，用来存储并管理多个 PropertyValue 对象
 * BeanDefinition 类用来封装 bean 信息的，主要包含 id（即 bean 对象的名称）、class（需要交由 spring 管理的类的全类名）及子标签 property 数据
+
+### 定义注册表相关类
+* BeanDefinitionRegistry 接口定义了注册表的相关操作，定义如下功能：
+* 注册 BeanDefinition 对象到注册表中
+* 从注册表中删除指定名称的 BeanDefinition 对象
+* 根据名称从注册表中获取 BeanDefinition 对象
+* 判断注册表中是否包含指定名称的 BeanDefinition 对象
+* 获取注册表中 BeanDefinition 对象的个数
+* 获取注册表中所有的 BeanDefinition 的名称
+* 
+* SimpleBeanDefinitionRegistry 类：实现了 BeanDefinitionRegistry 接口，定义了 Map、 集合作为注册表容器
