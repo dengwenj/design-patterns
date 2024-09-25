@@ -13,7 +13,7 @@ public class BeanDefinition {
     private MutablePropertyValues propertyValues;
 
     public BeanDefinition() {
-        this.propertyValues = new MutablePropertyValues();
+
     }
 
     public BeanDefinition(String id, String className) {
@@ -51,6 +51,14 @@ public class BeanDefinition {
      */
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public MutablePropertyValues getPropertyValues() {
+        return propertyValues;
+    }
+
+    public void setPropertyValues(MutablePropertyValues propertyValues) {
+        this.propertyValues = propertyValues;
     }
 
     public String toString() {

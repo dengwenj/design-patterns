@@ -124,3 +124,8 @@ private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHash
 * 获取注册表中所有的 BeanDefinition 的名称
 * 
 * SimpleBeanDefinitionRegistry 类：实现了 BeanDefinitionRegistry 接口，定义了 Map、 集合作为注册表容器
+
+### 定义解析器相关类
+* BeanDefinitionReader 是用来解析文件并在注册表中注册 bean 的信息。定义了两个规范：
+* 1、获取注册表的功能，让外界可以通过该对象获取注册表对象
+* 2、加载配置文件，并注册 bean 数据

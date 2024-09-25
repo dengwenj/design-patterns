@@ -5,6 +5,11 @@ import vip.dengwj2.beans.BeanDefinition;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @date 2024/9/25 21:56
+ * @author 朴睦
+ * @description 注册表接口实现类
+ */
 public class SimpleBeanDefinitionRegistry implements BeanDefinitionRegistry {
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
 
