@@ -108,3 +108,8 @@ private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHash
 ### 创建容器
 * ClasspathXmlApplicationContext 对 Bean 配置资源的载入是从 refresh() 方法开始的。refresh() 方法时一个模版方法，规定了 ioc 容器的启动流程，有些逻辑交给其子类实现。它对 Bean 配置资源进行载入。
 * ClasspathXmlApplicationContext 通过调用其父类 AbstractApplicationContext 的 refresh() 方法启动整个 ioc 容器对 bean 定义的载入过程
+
+### 定义 bean 相关的 pojo 类
+* PropertyValue 类：用于封装 bean 的属性，配置文件就是封装 bean 标签的子标签 property 标签数据
+* MutablePropertyValues 类：一个 bean 标签可以有多个 property 子标签，所以再定义一个类，用来存储并管理多个 PropertyValue 对象
+* BeanDefinition 类用来封装 bean 信息的，主要包含 id（即 bean 对象的名称）、class（需要交由 spring 管理的类的全类名）及子标签 property 数据
