@@ -129,3 +129,17 @@ private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHash
 * BeanDefinitionReader 是用来解析文件并在注册表中注册 bean 的信息。定义了两个规范：
 * 1、获取注册表的功能，让外界可以通过该对象获取注册表对象
 * 2、加载配置文件，并注册 bean 数据
+
+### IOC 容器相关类
+* BeanFactory 接口
+* 在该接口中定义 IOC 容器的统一规范获取 bean 对象
+* 1、根据 bean 对象的名称获取 bean 对象
+* 2、根据 bean 对象的名称获取 bean 对象，并进行类型转换
+* ApplicationContext 接口
+* 该接口的所有子实现类对 bean 对象的创建都是非延时的，所以在该接口中定义 refresh() 方法，该方法主要完成：
+* 1、加载配置文件
+* 2、根据注册表中的 BeanDefinition 对象封装的数据进行 bean 对象的创建
+* AbstractApplicationContext 类
+* 作为 ApplicationContext 接口的子类，所以该类也是非延时加载，所以需要在该类中定义一个 Map 集合，作为 bean 对象存储的容器
+* 声明 BeanDefinitionReader 类型的变量，用来进行 xml 配置文件的解析，符合单一职责原则
+* BeanDefinitionReader 类型的对象创建交由子类实现，因为只有子类明确到底创建 BeanDefinitionReader 哪个子实现类对象
