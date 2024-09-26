@@ -148,3 +148,10 @@ private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHash
 * 1、在构建方法中，创建 BeanDefinitionReader 对象
 * 2、在构造方法中，调用 refresh() 方法，用于进行配置文件加载，创建 bean 对象并存储到容器中
 * 3、重写父接口中的 getBean() 方法，并实现依赖注入操作
+
+### 自定义 spring ioc 总结
+* 工厂模式：这个使用工厂模式 + 配置文件的方式
+* 单例模式：spring ioc 管理的 bean 对象都是单例的，此处的单例不是通过构造器进行单例控制，而是 spring 框架对每一个 bean 只创建了一个对象
+* 模板方法模式：AbstractApplicationContext 类中的 finishBeanInitialization() 方法调用了子类的 getBean() 方法，因为 getBean() 的实现和环境息息相关
+* 迭代器模式：对于 MutablePropertyValues 类定义使用到了迭代器模式，因为此类存储并管理 PropertyValue 对象，也属于一个容器，所以给该容器提供一个遍历方式
+* spring 框架使用到了很多设计模式，如 AOP 使用到了代理模式，选择 JDK 代理或是 CGLIB 代理使用到了策略模式，还有适配器模式、装饰者模式、观察者模式等
