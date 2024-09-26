@@ -143,3 +143,8 @@ private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHash
 * 作为 ApplicationContext 接口的子类，所以该类也是非延时加载，所以需要在该类中定义一个 Map 集合，作为 bean 对象存储的容器
 * 声明 BeanDefinitionReader 类型的变量，用来进行 xml 配置文件的解析，符合单一职责原则
 * BeanDefinitionReader 类型的对象创建交由子类实现，因为只有子类明确到底创建 BeanDefinitionReader 哪个子实现类对象
+* ClassPathXmlApplicationContext 类
+* 该类主要是加载类路径下的配置文件，并进行 bean 对象的创建，主要完成一下功能：
+* 1、在构建方法中，创建 BeanDefinitionReader 对象
+* 2、在构造方法中，调用 refresh() 方法，用于进行配置文件加载，创建 bean 对象并存储到容器中
+* 3、重写父接口中的 getBean() 方法，并实现依赖注入操作

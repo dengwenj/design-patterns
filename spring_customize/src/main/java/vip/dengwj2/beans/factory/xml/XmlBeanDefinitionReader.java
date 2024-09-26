@@ -62,8 +62,8 @@ public class XmlBeanDefinitionReader implements BeanDefinitionReader {
                 PropertyValue propertyValue = new PropertyValue(name, ref, value);
                 // 把 propertyValue 存放到 MutablePropertyValues 里
                 propertyValues.addPropertyValue(propertyValue);
-                beanDefinition.setPropertyValues(propertyValues);
             }
+            beanDefinition.setPropertyValues(propertyValues);
 
             registry.registerBeanDefinition(id, beanDefinition);
         }

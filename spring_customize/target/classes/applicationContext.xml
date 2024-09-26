@@ -5,9 +5,19 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- 在这里配置bean -->
-    <bean id="userDao" class="vip.dengwj2.dao.impl.UserDaoImpl" />
+    <bean id="userDao" class="vip.dengwj2.dao.impl.UserDaoImpl">
+        <property name="username" value="朴睦" />
+        <property name="password" value="123456" />
+    </bean>
 
     <bean id="userService" class="vip.dengwj2.services.impl.UserServiceImpl">
+
+        <!-- 这里的 name 和ref 虽然是同名的但是 name 是指 UserService 类中的参数，
+        UserService 类中有一个 UserDao 类型名叫 userDao 的对象，
+        而 ref 是当前 xml 文件中叫做 userDao 的这个 bean，把它当作参数传进 UserService 中-->
+
+        <!--name 是 UserService 类的参数即: private UserDao userDao-->
+        <!--ref 是要传递给 setUserDao 中的参数-->
         <property name="userDao" ref="userDao" />
     </bean>
 </beans>
